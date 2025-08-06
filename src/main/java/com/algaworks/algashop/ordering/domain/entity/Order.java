@@ -111,6 +111,11 @@ public class Order {
         this.changeStatus(OrderStatus.PAID);
     }
 
+    public void markAsReady() {
+        this.changeStatus(OrderStatus.READY);
+        this.setReadyAt(OffsetDateTime.now());
+    }
+
     public void changePaymentMethod(PaymentMethod paymentMethod) {
         Objects.requireNonNull(paymentMethod);
         verifyIfChangeable();
@@ -143,6 +148,16 @@ public class Order {
 
         OrderItem orderItem = this.findOrderItem(orderItemId);
         orderItem.changeQuantity(quantity);
+
+        this.recalculateTotals();
+    }
+
+    public void removeItem(final OrderItemId orderItemId) {
+        Objects.requireNonNull(orderItemId);
+        verifyIfChangeable();
+
+        final OrderItem orderItem = findOrderItem(orderItemId);
+        this.items.remove(orderItem);
 
         this.recalculateTotals();
     }
