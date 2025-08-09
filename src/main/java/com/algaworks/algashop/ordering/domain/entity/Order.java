@@ -81,7 +81,7 @@ public class Order {
         Objects.requireNonNull(product);
         Objects.requireNonNull(quantity);
 
-        verifyIfChangeable();
+        this.verifyIfChangeable();
 
         product.checkOutOfStock();
 
@@ -102,13 +102,13 @@ public class Order {
 
     public void place() {
         this.verifyIfCanChangeToPlaced();
-        this.setPlacedAt(OffsetDateTime.now());
         this.changeStatus(OrderStatus.PLACED);
+        this.setPlacedAt(OffsetDateTime.now());
     }
 
     public void markAsPaid() {
-        this.setPaidAt(OffsetDateTime.now());
         this.changeStatus(OrderStatus.PAID);
+        this.setPaidAt(OffsetDateTime.now());
     }
 
     public void markAsReady() {
@@ -118,20 +118,20 @@ public class Order {
 
     public void changePaymentMethod(PaymentMethod paymentMethod) {
         Objects.requireNonNull(paymentMethod);
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.setPaymentMethod(paymentMethod);
     }
 
     public void changeBilling(Billing billing) {
         Objects.requireNonNull(billing);
-        verifyIfChangeable();
+        this.verifyIfChangeable();
         this.setBilling(billing);
     }
 
     public void changeShipping(Shipping newShipping) {
         Objects.requireNonNull(newShipping);
 
-        verifyIfChangeable();
+        this.verifyIfChangeable();
 
         if (newShipping.expectedDate().isBefore(LocalDate.now())) {
             throw new OrderInvalidShippingDeliveryDateException(this.id());
@@ -144,7 +144,7 @@ public class Order {
         Objects.requireNonNull(orderItemId);
         Objects.requireNonNull(quantity);
 
-        verifyIfChangeable();
+        this.verifyIfChangeable();
 
         OrderItem orderItem = this.findOrderItem(orderItemId);
         orderItem.changeQuantity(quantity);
@@ -152,14 +152,19 @@ public class Order {
         this.recalculateTotals();
     }
 
-    public void removeItem(final OrderItemId orderItemId) {
+    public void removeItem(OrderItemId orderItemId) {
         Objects.requireNonNull(orderItemId);
-        verifyIfChangeable();
+        this.verifyIfChangeable();
 
-        final OrderItem orderItem = findOrderItem(orderItemId);
+        OrderItem orderItem = findOrderItem(orderItemId);
         this.items.remove(orderItem);
 
         this.recalculateTotals();
+    }
+
+    public void cancel() {
+        this.setCanceledAt(OffsetDateTime.now());
+        this.changeStatus(OrderStatus.CANCELED);
     }
 
     public boolean isDraft() {
@@ -172,6 +177,14 @@ public class Order {
 
     public boolean isPaid() {
         return OrderStatus.PAID.equals(this.status());
+    }
+
+    public boolean isReady() {
+        return OrderStatus.READY.equals(this.status());
+    }
+
+    public boolean isCanceled() {
+        return OrderStatus.CANCELED.equals(this.status());
     }
 
     public OrderId id() {
