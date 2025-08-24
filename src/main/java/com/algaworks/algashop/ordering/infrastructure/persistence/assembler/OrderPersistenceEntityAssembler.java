@@ -12,7 +12,8 @@ public class OrderPersistenceEntityAssembler {
         return merge(new OrderPersistenceEntity(), order);
     }
 
-    public OrderPersistenceEntity merge(OrderPersistenceEntity orderPersistenceEntity, Order order) {
+    public OrderPersistenceEntity merge(
+            OrderPersistenceEntity orderPersistenceEntity, Order order) {
         orderPersistenceEntity.setId(order.id().value().toLong());
         orderPersistenceEntity.setCustomerId(order.customerId().value());
         orderPersistenceEntity.setTotalAmount(order.totalAmount().value());
@@ -23,6 +24,7 @@ public class OrderPersistenceEntityAssembler {
         orderPersistenceEntity.setPaidAt(order.paidAt());
         orderPersistenceEntity.setCanceledAt(order.canceledAt());
         orderPersistenceEntity.setReadyAt(order.readyAt());
+        orderPersistenceEntity.setVersion(order.version());
         return orderPersistenceEntity;
     }
 
