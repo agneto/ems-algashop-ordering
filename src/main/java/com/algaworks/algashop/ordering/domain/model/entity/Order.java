@@ -37,7 +37,6 @@ public class Order implements AggregateRoot<OrderId> {
 
     private Set<OrderItem> items;
 
-    @Setter
     private Long version;
 
     @Builder(builderClassName = "ExistingOrderBuilder", builderMethodName = "existing")
@@ -304,6 +303,10 @@ public class Order implements AggregateRoot<OrderId> {
 
     public Long version() {
         return version;
+    }
+
+    private void setVersion(Long version) {
+        this.version = version;
     }
 
     private void setId(OrderId id) {
