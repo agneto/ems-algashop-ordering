@@ -1,33 +1,28 @@
 package com.algaworks.algashop.ordering.domain.model.service;
 
 import com.algaworks.algashop.ordering.domain.model.entity.Customer;
-import com.algaworks.algashop.ordering.domain.model.repository.Customers;
-import com.algaworks.algashop.ordering.domain.model.valueobject.*;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.CustomerId;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Address;
+import com.algaworks.algashop.ordering.domain.model.valueobject.BirthDate;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Document;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Email;
+import com.algaworks.algashop.ordering.domain.model.valueobject.FullName;
+import com.algaworks.algashop.ordering.domain.model.valueobject.Phone;
+import com.algaworks.algashop.ordering.domain.model.valueobject.ZipCode;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 
-@ExtendWith(MockitoExtension.class)
-class CustomerRegistrationServiceTest {
+@SpringBootTest
+class CustomerRegistrationServiceIT {
 
-    @Mock
-    private Customers customers;
-
-    @InjectMocks
+    @Autowired
     private CustomerRegistrationService customerRegistrationService;
 
     @Test
-    void shouldRegister() {
-        Mockito.when(customers.isEmailUnique(Mockito.any(Email.class), Mockito.any(CustomerId.class)))
-                .thenReturn(true);
-
+    public void shouldRegister() {
         Customer customer = customerRegistrationService.register(
                 new FullName("John", "Doe"),
                 new BirthDate(LocalDate.of(1991, 7, 5)),
