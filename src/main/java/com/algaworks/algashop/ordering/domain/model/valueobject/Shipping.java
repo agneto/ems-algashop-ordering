@@ -1,5 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.valueobject;
 
+import com.algaworks.algashop.ordering.domain.model.commons.Address;
+import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import lombok.Builder;
 
 import java.time.LocalDate;

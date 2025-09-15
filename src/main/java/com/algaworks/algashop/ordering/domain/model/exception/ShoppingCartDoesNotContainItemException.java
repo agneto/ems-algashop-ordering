@@ -1,5 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.exception;
 
+import com.algaworks.algashop.ordering.domain.model.DomainException;
+import com.algaworks.algashop.ordering.domain.model.ErrorMessages;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartItemId;
 

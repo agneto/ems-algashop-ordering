@@ -1,6 +1,8 @@
 package com.algaworks.algashop.ordering.domain.model.exception;
 
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.ProductId;
+import com.algaworks.algashop.ordering.domain.model.DomainException;
+import com.algaworks.algashop.ordering.domain.model.ErrorMessages;
+import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import com.algaworks.algashop.ordering.domain.model.valueobject.id.ShoppingCartId;
 
 public class ShoppingCartDoesNotContainProductException extends DomainException {

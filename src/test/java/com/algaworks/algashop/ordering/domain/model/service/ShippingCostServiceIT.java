@@ -1,7 +1,7 @@
 package com.algaworks.algashop.ordering.domain.model.service;
 
 import com.algaworks.algashop.ordering.domain.model.service.ShippingCostService.CalculationRequest;
-import com.algaworks.algashop.ordering.domain.model.valueobject.ZipCode;
+import com.algaworks.algashop.ordering.domain.model.commons.ZipCode;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

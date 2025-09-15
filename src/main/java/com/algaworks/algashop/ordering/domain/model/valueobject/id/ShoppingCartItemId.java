@@ -1,7 +1,7 @@
 
 package com.algaworks.algashop.ordering.domain.model.valueobject.id;
 
-import com.algaworks.algashop.ordering.domain.model.utility.IdGenerator;
+import com.algaworks.algashop.ordering.domain.model.IdGenerator;
 
 import java.util.Objects;
 import java.util.UUID;
