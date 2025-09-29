@@ -1,6 +1,6 @@
 package com.algaworks.algashop.ordering.infrastructure.persistence.shoppingcart;
 
-import com.algaworks.algashop.ordering.domain.model.service.ShoppingCartProductAdjustmentService;
+import com.algaworks.algashop.ordering.domain.model.shoppingcart.ShoppingCartProductAdjustmentService;
 import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import lombok.RequiredArgsConstructor;

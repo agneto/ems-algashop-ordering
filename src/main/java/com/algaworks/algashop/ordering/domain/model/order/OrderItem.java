@@ -4,8 +4,6 @@ import com.algaworks.algashop.ordering.domain.model.commons.Money;
 import com.algaworks.algashop.ordering.domain.model.product.Product;
 import com.algaworks.algashop.ordering.domain.model.product.ProductName;
 import com.algaworks.algashop.ordering.domain.model.commons.Quantity;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderItemId;
 import com.algaworks.algashop.ordering.domain.model.product.ProductId;
 import lombok.Builder;
 

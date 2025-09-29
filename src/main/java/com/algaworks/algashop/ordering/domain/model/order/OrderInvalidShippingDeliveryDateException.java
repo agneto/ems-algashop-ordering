@@ -2,7 +2,7 @@ package com.algaworks.algashop.ordering.domain.model.order;
 
 import com.algaworks.algashop.ordering.domain.model.DomainException;
 import com.algaworks.algashop.ordering.domain.model.ErrorMessages;
-import com.algaworks.algashop.ordering.domain.model.valueobject.id.OrderId;
+import com.algaworks.algashop.ordering.domain.model.order.OrderId;
 
 public class OrderInvalidShippingDeliveryDateException extends DomainException {
 
