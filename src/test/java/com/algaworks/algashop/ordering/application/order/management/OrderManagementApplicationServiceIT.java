@@ -1,17 +1,25 @@
 
 package com.algaworks.algashop.ordering.application.order.management;
 
+import com.algaworks.algashop.ordering.application.customer.loyaltypoints.CustomerLoyaltyPointsApplicationService;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.algaworks.algashop.ordering.domain.model.customer.Customers;
 import com.algaworks.algashop.ordering.domain.model.order.*;
+import com.algaworks.algashop.ordering.infrastructure.listener.order.OrderEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Transactional
@@ -25,6 +33,12 @@ class OrderManagementApplicationServiceIT {
 
     @Autowired
     private Customers customers;
+
+    @MockitoSpyBean
+    private OrderEventListener orderEventListener;
+
+    @MockitoSpyBean
+    private CustomerLoyaltyPointsApplicationService loyaltyPointsApplicationService;
 
     @BeforeEach
     public void setup() {
@@ -44,6 +58,8 @@ class OrderManagementApplicationServiceIT {
         Assertions.assertThat(updatedOrder).isPresent();
         Assertions.assertThat(updatedOrder.get().status()).isEqualTo(OrderStatus.CANCELED);
         Assertions.assertThat(updatedOrder.get().canceledAt()).isNotNull();
+
+        verify(orderEventListener).listen(any(OrderCanceledEvent.class));
     }
 
     @Test
@@ -74,6 +90,9 @@ class OrderManagementApplicationServiceIT {
         Assertions.assertThat(updatedOrder).isPresent();
         Assertions.assertThat(updatedOrder.get().status()).isEqualTo(OrderStatus.PAID);
         Assertions.assertThat(updatedOrder.get().paidAt()).isNotNull();
+
+        verify(orderEventListener, times(1))
+                .listen(any(OrderPaidEvent.class));
     }
 
     @Test
@@ -113,6 +132,9 @@ class OrderManagementApplicationServiceIT {
         Assertions.assertThat(updatedOrder).isPresent();
         Assertions.assertThat(updatedOrder.get().status()).isEqualTo(OrderStatus.READY);
         Assertions.assertThat(updatedOrder.get().readyAt()).isNotNull();
+
+        verify(orderEventListener).listen(any(OrderReadyEvent.class));
+        verify(loyaltyPointsApplicationService).addLoyaltyPoints(any(UUID.class), any(String.class));
     }
 
     @Test

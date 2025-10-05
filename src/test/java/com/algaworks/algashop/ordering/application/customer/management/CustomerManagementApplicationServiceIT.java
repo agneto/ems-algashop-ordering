@@ -1,15 +1,24 @@
 package com.algaworks.algashop.ordering.application.customer.management;
 
+import com.algaworks.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerArchivedEvent;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.model.customer.CustomerNotFoundException;
+import com.algaworks.algashop.ordering.domain.model.customer.CustomerRegisteredEvent;
+import com.algaworks.algashop.ordering.infrastructure.listener.customer.CustomerEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 
 @SpringBootTest
 @Transactional
@@ -17,6 +26,12 @@ class CustomerManagementApplicationServiceIT {
 
     @Autowired
     private CustomerManagementApplicationService customerManagementApplicationService;
+
+    @MockitoSpyBean
+    private CustomerEventListener customerEventListener;
+
+    @MockitoSpyBean
+    private CustomerNotificationApplicationService customerNotificationService;
 
     @Test
     public void shouldRegister() {
@@ -43,6 +58,11 @@ class CustomerManagementApplicationServiceIT {
                 );
 
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
+
+        Mockito.verify(customerEventListener).listen(any(CustomerRegisteredEvent.class));
+        Mockito.verify(customerEventListener, never()).listen(any(CustomerArchivedEvent.class));
+        Mockito.verify(customerNotificationService).notifyNewRegistration(any(
+                CustomerNotificationApplicationService.NotifyNewRegistrationInput.class));
     }
 
     @Test

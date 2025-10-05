@@ -18,7 +18,7 @@ import java.util.Set;
 class OrderTest {
 
     @Test
-    public void shouldGenerateDraftOrder() {
+    void shouldGenerateDraftOrder() {
         CustomerId customerId = new CustomerId();
         Order order = Order.draft(customerId);
 
@@ -117,7 +117,7 @@ class OrderTest {
     }
 
     @Test
-    public void givenDraftOrder_whenChangePaymentMethod_shouldAllowChange() {
+    void givenDraftOrder_whenChangePaymentMethod_shouldAllowChange() {
         Order order = Order.draft(new CustomerId());
         order.changePaymentMethod(PaymentMethod.CREDIT_CARD);
         Assertions.assertWith(order.paymentMethod()).isEqualTo(PaymentMethod.CREDIT_CARD);
@@ -132,17 +132,21 @@ class OrderTest {
     }
 
     @Test
-    public void givenDraftOrder_whenChangeShipping_shouldAllowChange() {
+    void givenDraftOrder_whenChangeShipping_shouldAllowChange() {
         Shipping shipping = com.algaworks.algashop.ordering.domain.model.order.OrderTestDataBuilder.aShipping();
         Order order = Order.draft(new CustomerId());
+        final Money expectedTotalAmount = order.totalAmount().add(shipping.cost());
 
         order.changeShipping(shipping);
 
-        Assertions.assertWith(order, o -> Assertions.assertThat(o.shipping()).isEqualTo(shipping));
+        Assertions.assertWith(order,
+                o -> Assertions.assertThat(o.shipping()).isEqualTo(shipping),
+                o -> Assertions.assertThat(o.totalAmount()).isEqualTo(expectedTotalAmount)
+        );
     }
 
     @Test
-    public void givenDraftOrderAndDeliveryDateInThePast_whenChangeShipping_shouldNotAllowChange() {
+    void givenDraftOrderAndDeliveryDateInThePast_whenChangeShipping_shouldNotAllowChange() {
         LocalDate expectedDeliveryDate = LocalDate.now().minusDays(2);
 
         Shipping shipping = OrderTestDataBuilder.aShipping().toBuilder()
@@ -156,7 +160,7 @@ class OrderTest {
     }
 
     @Test
-    public void givenDraftOrder_whenChangeItem_shouldRecalculate() {
+    void givenDraftOrder_whenChangeItem_shouldRecalculate() {
         Order order = Order.draft(new CustomerId());
 
         order.addItem(

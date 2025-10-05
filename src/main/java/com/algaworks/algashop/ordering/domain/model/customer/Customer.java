@@ -1,5 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.customer;
 
+import com.algaworks.algashop.ordering.domain.model.AbstractEventSourceEntity;
 import com.algaworks.algashop.ordering.domain.model.AggregateRoot;
 import com.algaworks.algashop.ordering.domain.model.commons.Address;
 import com.algaworks.algashop.ordering.domain.model.commons.Document;
@@ -14,7 +15,9 @@ import java.util.UUID;
 
 import static com.algaworks.algashop.ordering.domain.model.ErrorMessages.VALIDATION_ERROR_FULLNAME_IS_NULL;
 
-public class Customer implements AggregateRoot<CustomerId> {
+public class Customer
+        extends AbstractEventSourceEntity
+        implements AggregateRoot<CustomerId> {
     private CustomerId id;
     private FullName fullName;
     private BirthDate birthDate;
@@ -34,7 +37,7 @@ public class Customer implements AggregateRoot<CustomerId> {
     private static Customer createBrandNew(FullName fullName, BirthDate birthDate, Email email,
                                            Phone phone, Document document, Boolean promotionNotificationsAllowed,
                                            Address address) {
-        return new Customer(new CustomerId(),
+        final Customer customer = new Customer(new CustomerId(),
                 null,
                 fullName,
                 birthDate,
@@ -47,6 +50,11 @@ public class Customer implements AggregateRoot<CustomerId> {
                 null,
                 LoyaltyPoints.ZERO,
                 address);
+
+        customer.publishDomainEvent(new CustomerRegisteredEvent(customer.id(), customer.registeredAt(),
+                customer.fullName(), customer.email()));
+
+        return customer;
     }
 
     @Builder(builderClassName = "ExistingCustomerBuild", builderMethodName = "existing")
@@ -89,6 +97,7 @@ public class Customer implements AggregateRoot<CustomerId> {
         this.setAddress(this.address().toBuilder()
                 .number("Anonymized")
                 .complement(null).build());
+        this.publishDomainEvent(new CustomerArchivedEvent(this.id(), this.archivedAt()));
     }
 
     public void enablePromotionNotifications() {
