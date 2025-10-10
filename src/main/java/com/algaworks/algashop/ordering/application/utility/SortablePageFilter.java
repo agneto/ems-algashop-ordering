@@ -14,7 +14,7 @@ public abstract class SortablePageFilter<T> extends PageFilter {
     private T sortByProperty;
     private Sort.Direction sortDirection;
 
-    public SortablePageFilter(int size, int page) {
+    protected SortablePageFilter(int size, int page) {
         super(size, page);
     }
 
