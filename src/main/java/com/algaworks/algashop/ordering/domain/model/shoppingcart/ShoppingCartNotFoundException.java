@@ -1,4 +1,6 @@
 package com.algaworks.algashop.ordering.domain.model.shoppingcart;
 
-public class ShoppingCartNotFoundException extends RuntimeException {
+import com.algaworks.algashop.ordering.domain.model.DomainEntityNotFoundException;
+
+public class ShoppingCartNotFoundException extends DomainEntityNotFoundException {
 }
