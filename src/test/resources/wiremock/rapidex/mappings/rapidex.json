@@ -1,0 +1,25 @@
+
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/delivery-cost",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.originZipCode"
+      },
+      {
+        "matchesJsonPath": "$.destinationZipCode"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "deliveryCost": "35.00",
+      "estimatedDaysToDeliver": "7"
+    }
+  }
+}
